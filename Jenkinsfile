@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Code') {
             steps {
-                git https://github.com/pranshparashar/node-js-sample.git
+                git bransh: 'main', https://github.com/pranshparashar/node-js-sample.git
             }
         }
 
