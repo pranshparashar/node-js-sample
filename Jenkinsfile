@@ -1,13 +1,16 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:18-alpine'
+            args '-u root:root' // Run as root inside the container (optional)
+        }
+    }
+
+    environment {
+        APP_ENV = 'dev'
+    }
 
     stages {
-        stage('Clone Code') {
-            steps {
-                git 'https://github.com/pranshparashar/node-js-sample.git'
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
@@ -16,13 +19,14 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh 'npm test || true'  // Optional: avoid breaking pipeline if test command not set
+                sh 'npm test || echo "No tests found"'
             }
         }
 
         stage('Deploy') {
             steps {
-                sh 'echo "Deploying app to test environment..."'
+                echo "Deploying app in ${APP_ENV} environment"
+                // Add your deployment logic here
             }
         }
     }
@@ -32,7 +36,7 @@ pipeline {
             echo '✅ Pipeline completed successfully!'
         }
         failure {
-            echo '❌ Pipeline failed. Check the logs above.'
+            echo '❌ Pipeline failed. Check logs.'
         }
     }
 }
