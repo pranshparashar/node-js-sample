@@ -2,12 +2,8 @@ pipeline {
     agent {
         docker {
             image 'node:18-alpine'
-            args '-u root:root' // Run as root inside the container (optional)
+            args '-u root:root'
         }
-    }
-
-    environment {
-        APP_ENV = 'dev'
     }
 
     stages {
@@ -25,18 +21,14 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo "Deploying app in ${APP_ENV} environment"
-                // Add your deployment logic here
+                echo "Deploying to development..."
             }
         }
     }
 
     post {
-        success {
-            echo '✅ Pipeline completed successfully!'
-        }
-        failure {
-            echo '❌ Pipeline failed. Check logs.'
+        always {
+            echo "Pipeline complete."
         }
     }
 }
